@@ -1,0 +1,25 @@
+.navbar{
+    background-color: black;
+
+    font-size: 47px;
+    padding: 7px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100px;
+    width: 100vw;
+
+   
+
+}
+
+
+.links{
+    color:white ;
+    text-decoration: none;
+
+}
+
+.links:hover{
+    opacity: 0.5;
+}
