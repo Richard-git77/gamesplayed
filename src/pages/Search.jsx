@@ -1,14 +1,32 @@
-import { useState } from "react"
+import { useState,useEffect, useLayoutEffect} from "react"
 import { Link,useLocation } from "react-router-dom";
 import '../App.css';
 
 export const Search = () => {
-      let{state} =useLocation();
+  
+         let{state} =useLocation()
+        //  console.log({state})
     
+      
+        
+              let searchDetails= JSON.parse(localStorage.getItem('searchDetails')); 
+       
+        
+         let searchPreventRefresh= JSON.parse(localStorage.getItem('searchPreventRefresh')); 
+        
+        
+        
+
+
+
 
       // usaremos un state para guardar el juego que el cliente escribira en su input gameSearched y otro gameResult para guardar la informacion que trae el fetch
-      const [gameSearched, setGameSearched] = useState('');
+      // const [gameSearched, setGameSearched] = useState( searchQuery  ? searchQuery : '');
+      // const [gameResult, setGameResult] = useState(searchResults ? searchResults : []);
+      const [gameSearched, setGameSearched] = useState( '');
       const [gameResult, setGameResult] = useState([]);
+
+
         // haraemos un fetch en la pagina de search ya que aqui buscaremos en la base de datos de la api por un nombre en particular  y la api nos devolvera los resultados que contengan dicha palabra dentro de sus basesd datos, la funcion searchedGameFetch hara el fetch correspondiente,ademas se le pasara como parametro el state de gameSearched ya que este contara con la informacion seteada  el juego deseado, y se concatenara dentro de  la url en los params, finalmente setearemos el setGameResult con la informacion deseada
       const serchedGameFetch = async(gameSearched) =>{
             try {
@@ -32,7 +50,7 @@ export const Search = () => {
         // las funcion onChange sirve para capturar la informacion que se introduce en el input y la setea en el state de gameSearched
 
      const onChange =(e)=>{
-        const writtedGame = e.target.value;
+       let writtedGame = e.target.value;
         // console.log({writtedGame});
         setGameSearched(writtedGame)
         console.log({gameSearched});
@@ -45,10 +63,21 @@ export const Search = () => {
         e.preventDefault();
         serchedGameFetch(gameSearched);
         console.log({gameSearched} );
-        console.log({state});
-
+        window.sessionStorage.setItem("searchDetails",JSON.stringify(gameSearched))
+       
+       
 
       }
+       
+      useLayoutEffect(() => {
+        
+        window.sessionStorage.setItem("searchPreventRefresh",JSON.stringify(searchPreventRefresh ? searchPreventRefresh : [...gameResult]));
+      }, [gameResult])
+      
+     
+      
+      
+      
      
      
 
@@ -57,7 +86,17 @@ export const Search = () => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-      <input type="text" className="input-writtingtext" onChange={onChange} />
+
+        { searchDetails ? 
+
+      <input type="text" className="input-writtingtext" onChange={onChange} 
+      
+      value={`${searchDetails}`}/>
+
+      
+      : 
+      <input type="input-writtingtext"  className="input-writtingtext" onChange={onChange}/>
+        }
       <input type="submit" className="input-writtingtext" onClick={onSubmit} value="Search" />
       </form>
 
