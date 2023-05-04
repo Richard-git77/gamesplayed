@@ -2,7 +2,7 @@ import '../App.css'
 import {useState, useEffect} from 'react';
 
 import { NextPreviousButton } from '../components';
-
+import { Link } from 'react-router-dom';
 
 // Funcion principal en la que haremos fetch y guardaremos la data en un useState
 
@@ -73,8 +73,13 @@ export const App = ( ) => {
 
         {
           saveData.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
+            
             <div key={id} className='card'>
+              <Link to={`/gamePage/${name}`}state={
+                        {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
+                    }>
               <img src={background_image} alt="image" className='image' />
+              </Link>
               <p>{`Game :${name}`}</p>
               <p>{`Released Date :${released}`}</p>
 
