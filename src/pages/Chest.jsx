@@ -26,15 +26,14 @@ console.log({chestContainer});
 
 
   return (
-    <div>
-            <p>Chest</p>
+    <div className="container">
 
             {/* si hay algo dentro de chestContainer hacer map, y renderizar informacion y si no no hagas nada */}
       {
         chestContainer  ?
-        chestContainer.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
+        chestContainer.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots,age,platform,liked,finished}) =>(
 
-          <div className="search" key={id}>
+          <div className="container" key={id}>
              
              <Link to={`/gamePage/${name}`}state={
                         {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
@@ -42,6 +41,10 @@ console.log({chestContainer});
               <img src={background_image} alt="image" className='image' />
               </Link>
               <p>{`Game :${name}`}</p>
+              <p>{` How Old Were You When You Played This Game?:${age}`}</p>
+              <p>{` Wich Platform you Played  This Game?:${platform}`}</p>
+              <p>{`Do You Like It? :${liked}`}</p>
+              <p>{`Do You Finished It :${finished}`}</p>
 
                     
           

@@ -2,8 +2,7 @@ import {useState,useEffect} from 'react';
 
 
 //recibimos por props la funcion onCloseModal, que cierra el modal,para abrir lo hicimos desde el boron de la pagina GamePage desde el boton de add game
-export const Modal = ({closeModal}) => {
-let lastObj = {};
+export const Modal = ({closeModal,handleRemove}) => {
 
     //este state servira para guardar la informacion que se vaya escribiendo en nuestros inputs, gracias a la ayuda de la funcion handleUnput Change
     const [gameData, setGameData] = useState({
@@ -31,7 +30,7 @@ let lastObj = {};
         }
         if (storedChest) {
           setchestLocalStorage(JSON.parse(storedChest));
-          console.log({storedChest});
+          // console.log({storedChest});
           // console.log({chestLocalStorage});
         }
       }, []);
@@ -39,7 +38,7 @@ let lastObj = {};
  
 
 
-      //handleInputChange hace deconstruccion de las propiedades del evento,target que usaremos para tomar la informacion que el usuario ecriba en los inputs, despues seteams el etGameData con una copia de gameData anterior el cual se puede escribir prevGamedata,ademas de setear la informacion antes mencionada del evento.target y hacer una condicion, esta condicion es que el nombre del input que asignamos en el name de cada uno osea en el [name] puede ser "age", 'platform'... , checara ese input y si es de tipo checkbox lo dejara con la propiedad del checkbox[true,false] ,y si es un input que no sea del tipo checkbox le dara su propiedad value , para tomar lo que estamos ecribiendo
+      //handleInputChange hace deconstruccion de las propiedades del evento,target que usaremos para tomar la informacion que el usuario ecriba en los inputs, despues setean el etGameData con una copia de gameData anterior el cual se puede llamar un callback y escribir en  prevGamedata,ademas de setear la informacion antes mencionada del evento.target y hacer una condicion, esta condicion es que el nombre del input que asignamos en el name de cada uno osea en el [name] puede ser "age", 'platform'... , checara ese input y si es de tipo checkbox lo dejara con la propiedad del checkbox[true,false] ,y si es un input que no sea del tipo checkbox le dara su propiedad value , para tomar lo que estamos ecribiendo
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setGameData((prevGameData) => ({
@@ -52,7 +51,19 @@ let lastObj = {};
       //funcion para hacer submit en el <form>  ademas de que hace una llamada a la funcion closeModal()
       const handleSubmit = (e) => {
         e.preventDefault();
-       
+        const lastObj = {...chestLocalStorage[chestLocalStorage.length - 1]};
+
+        lastObj.age = gameData.age;
+        lastObj.platform = gameData.platform;
+        lastObj.finished = gameData.finished;
+        lastObj.liked = gameData.liked;
+
+        const updatedChestLocalStorage = [
+          ...chestLocalStorage.slice(0, chestLocalStorage.length - 1),
+          lastObj
+        ];
+
+  localStorage.setItem('chest', JSON.stringify(updatedChestLocalStorage));
         
         
        
@@ -64,12 +75,8 @@ let lastObj = {};
           
       useEffect(() => {
 
-        console.log({chestLocalStorage})
-        if (gameData && chestLocalStorage) {
-          const dataToConcat = { ...gameData };
-          setchestLocalStorage([...chestLocalStorage, dataToConcat]);
-        }
-        console.log({chestLocalStorage});
+       console.log({gameData});
+       console.log({chestLocalStorage});
       }, []);
 
 
@@ -79,27 +86,7 @@ let lastObj = {};
     
             
 
-    // useEffect(() => {
-    //   lastObj = chestLocalStorage[chestLocalStorage.length - 1];
-    //     console.log({lastObj} );
 
-    //     if (Object.keys(lastObj).length === 0) {
-    //       chestLocalStorage[chestLocalStorage.length - 1] = {  age: '',
-    //       platform: '',
-    //       finished: false,
-    //       liked: '', };
-    //     } else {
-    //       lastObj.age = chestLocalStorage.age;
-    //       lastObj.platform = chestLocalStorage.platform;
-    //       lastObj.finished = chestLocalStorage.finished;
-    //       lastObj.liked = chestLocalStorage.liked;
-
-    //       chestLocalStorage([...chestLocalStorage, lastObj])
-    //     }
-    //     console.log({lastObj})
-        
-    //   console.log({lastObj});
-    // }, [chestLocalStorage])
     
     
 
@@ -110,7 +97,7 @@ let lastObj = {};
       <h2>Game Card</h2>
       <form >
       <p>At What Age Did You Played It:</p>
-      <input 
+      <input  style={{color: 'black'}}
         type="text" 
         name="age"
         value={gameData.age}
@@ -167,7 +154,8 @@ let lastObj = {};
             value="no"
             checked={gameData.liked === "no"}
             onChange={handleInputChange} /> No
-      <button onClick={handleSubmit}>Close</button>
+      <button onClick={handleSubmit}>Save</button>
+      <button onClick={handleRemove}>Cancel</button>
       </form>
     </div>
   </div>

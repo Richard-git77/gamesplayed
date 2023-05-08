@@ -18,7 +18,7 @@ export const NextPreviousButton = ({onNext,onPrevious,prev,next}) => {
     
 
     <nav>
-        <div>
+        <div >
 
             
             {/* aqui hacemos un renderizado condicional de los botones para hacer atras o siguiente,
@@ -27,14 +27,14 @@ export const NextPreviousButton = ({onNext,onPrevious,prev,next}) => {
                    prev ?
                 
                 
-                    <button onClick={onHandleClickPrev}>Previous</button>
+                    <button style={{color: 'white', fontSize: 27}} onClick={onHandleClickPrev}>Previous</button>
 
                     : null
                 
             }
                    {
                     next ? 
-                    <button  onClick={onHandleClickNext}>Next </button>
+                    <button style={{color: 'white', fontSize: 27}}  onClick={onHandleClickNext}>Next </button>
                     : null
                     
                 }

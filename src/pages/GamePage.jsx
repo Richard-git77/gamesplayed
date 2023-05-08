@@ -27,24 +27,26 @@ export const GamePage = () => {
   useEffect(() => {
     setSavedGame([state]);
     let chestFirst = JSON.parse(localStorage.getItem('chest')) || [];
-    
-    console.log({chestFirst});
+    // console.log({chestFirst});
     setChestAdd(chestFirst)
-    console.log(chestAdd);
-    console.log({state});
+    // console.log(chestAdd);
+    // console.log({state});
+    if (chestFirst.some(item => item.id === state.id)) {
+      setIsModalOpen(true);
+    }
    
   }, []);
   // console.log({savedGame});
 
-  // funcion para filtrar el array de chestAdd , en el localStorage y en el propio array de chestAdd y eliminar el ultimo elemento de los arrays, y actualiza la informacion despues de que se elimina el ultimo elemento en antes 
+  // funcion para filtrar el array de chestAdd , en el localStorage y en el propio array de chestAdd y eliminar el ultimo elemento de los arrays, y actualiza la informacion despues de que se elimina el ultimo elemento en antes ,tambien pone el isModelOpen en false, para que se cierre cuando demos click en el button  remove
   const handleRemove = () => {
 
 
     let chest= JSON.parse(localStorage.getItem('chest')) ; 
-
-    let lastIdRemove =  chestAdd[chestAdd.length -1].id;
+    
+    // let lastIdRemove =  chestAdd[chestAdd.length -1].id;
       
-    let filteredChest = chestAdd.filter(item => item.id !== lastIdRemove );
+    let filteredChest = chestAdd.filter(item => item.id !== state.id );
     setChestAdd(filteredChest)
        
     chest.pop();
@@ -53,7 +55,8 @@ export const GamePage = () => {
           console.log({chestAdd});
     
   
-    
+          setIsModalOpen(false);
+         
     
   
   };
@@ -71,6 +74,9 @@ export const GamePage = () => {
     }
 
     handleOpenModal();
+    setIsModalOpen(true);
+    
+    
     
     }
 
@@ -83,10 +89,8 @@ export const GamePage = () => {
    
     const newChest = [...chestAdd];
     localStorage.setItem('chest', JSON.stringify(newChest));
-
     
   }
-
   }, [chestAdd]);
 
 
@@ -96,17 +100,18 @@ export const GamePage = () => {
   // handleOpenModal yhandleCloseModal sirven para setear cierto o falso, dependiendo de un evento onClick de un boton
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    console.log({isModalOpen});
+    // console.log({isModalOpen});
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    console.log({isModalOpen});
+    // console.log({isModalOpen});
 
   };
 
 
 
+ 
   
   
 
@@ -114,23 +119,31 @@ export const GamePage = () => {
 
   return (
     <>
+
+
+
+      <button style= {{color:'white'}} onClick={() => navigate(-1)}>Go back</button>
 {         
       
-        chestAdd.some(item => item === state)?
+        chestAdd.some(item => item.id === state.id)?
           <div>
         
-         <button  style={{color:'black',marginLeft: '20px'}}onClick={handleRemove}>Remove Game</button> 
+         <button  style={{color:'white',marginLeft: '20px'}}onClick={handleRemove}>Remove Game</button> 
 
+         {isModalOpen && <Modal closeModal={handleCloseModal} handleRemove={handleRemove} />} 
 
-        {isModalOpen && <Modal closeModal={handleCloseModal} />}
 
         </div>
-          : ( <button  style={{color:'black'}}onClick={handleAdd}>Add Game</button> )
+       
+          : 
+          <div>
+           <button  style={{color:'white'}}onClick={handleAdd}>Add Game</button> 
         
+          </div>
                 }
-    <div className={!isModalOpen ? "gamepage" : "gamepageblur"}>GamePage
+    <div className={isModalOpen ? "gamepageblur" : "gamepage"}>
 
-        <button style= {{color:'black'}} onClick={() => navigate(-1)}>Go back</button>
+       
 
 
  

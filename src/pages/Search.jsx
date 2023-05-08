@@ -4,7 +4,6 @@ import '../App.css';
 
 export const Search = () => {
   
-         let{state} =useLocation()
         //  console.log({state})
     
       
@@ -84,7 +83,7 @@ export const Search = () => {
 
 
   return (
-    <div>
+    <div className="container">
       <form onSubmit={onSubmit}>
 
         { searchDetails ? 
@@ -95,7 +94,7 @@ export const Search = () => {
 
       
       : 
-      <input type="input-writtingtext"  className="input-writtingtext" onChange={onChange}/>
+      <input type="input-writtingtext" style={{margin: '10px'}} className="input-writtingtext" onChange={onChange}/>
         }
       <input type="submit" className="input-writtingtext" onClick={onSubmit} value="Search" />
       </form>

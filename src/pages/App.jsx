@@ -72,17 +72,7 @@ export const App = ( ) => {
       <NextPreviousButton  prev={infoPrev} next={infoNext} onPrevious={onPrevious} onNext={onNext}/>    
 
       {
-          // saveData.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
-            
-          //   <div key={id} className='card'>
-          //     <Link to={`/gamePage/${name}`}state={
-          //               {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
-          //           }>
-          //     <img src={background_image} alt="image" className='image' />
-          //     </Link>
-          //     <p>{`Game :${name}`}</p>
-          //     <p>{`Released Date :${released}`}</p>
-        
+         
           saveData.map(({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
                 <div className='card' key={id}>
                     <Link to={`/gamePage/${name}`}state={
