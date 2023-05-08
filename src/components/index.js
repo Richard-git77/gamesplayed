@@ -1,3 +1,4 @@
 export * from './NavBar'
 export * from './NextPreviousButton'
-export * from './Modal.jsx'
+export * from './Modal'
+export * from './Gamecard'

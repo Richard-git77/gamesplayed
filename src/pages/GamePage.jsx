@@ -2,6 +2,7 @@ import { useLocation,useNavigate } from "react-router-dom"
 import {useState,useEffect} from 'react'
 
 import {Modal} from '../components'
+import {Gamecard} from '../components'
 export const GamePage = () => {
 
 
@@ -32,7 +33,7 @@ export const GamePage = () => {
     console.log(chestAdd);
     console.log({state});
    
-  }, [])
+  }, []);
   // console.log({savedGame});
 
   // funcion para filtrar el array de chestAdd , en el localStorage y en el propio array de chestAdd y eliminar el ultimo elemento de los arrays, y actualiza la informacion despues de que se elimina el ultimo elemento en antes 
@@ -63,6 +64,7 @@ export const GamePage = () => {
 
     if (!chestAdd.includes(state)) {
       setChestAdd([...chestAdd, state]);
+      // setChestAdd([undefined]);
  
 
       
@@ -94,10 +96,13 @@ export const GamePage = () => {
   // handleOpenModal yhandleCloseModal sirven para setear cierto o falso, dependiendo de un evento onClick de un boton
   const handleOpenModal = () => {
     setIsModalOpen(true);
+    console.log({isModalOpen});
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    console.log({isModalOpen});
+
   };
 
 
@@ -108,29 +113,7 @@ export const GamePage = () => {
 
 
   return (
-    <div className="gamepage">GamePage
-
-        <button style= {{color:'black'}} onClick={() => navigate(-1)}>Go back</button>
-
- 
-    {
-        savedGame  ?
-        savedGame.map( game =>(
-
-          <div className="search" key= {game.id}>
-             
-
-            <img src={game.background_image} width={500} height={277} />
-            <p>{game.name}</p>
-
-                    
-          
-          </div>
-        ))
-
-        : null
-      } 
-
+    <>
 {         
       
         chestAdd.some(item => item === state)?
@@ -145,12 +128,21 @@ export const GamePage = () => {
           : ( <button  style={{color:'black'}}onClick={handleAdd}>Add Game</button> )
         
                 }
-            
-        
+    <div className={!isModalOpen ? "gamepage" : "gamepageblur"}>GamePage
+
+        <button style= {{color:'black'}} onClick={() => navigate(-1)}>Go back</button>
+
 
  
+    {
+        savedGame  ?
 
+        <Gamecard savedGame={savedGame}/>
+      
+        : null
+      } 
 
     </div>
+    </>
   )
 }

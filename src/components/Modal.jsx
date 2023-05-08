@@ -3,7 +3,7 @@ import {useState,useEffect} from 'react';
 
 //recibimos por props la funcion onCloseModal, que cierra el modal,para abrir lo hicimos desde el boron de la pagina GamePage desde el boton de add game
 export const Modal = ({closeModal}) => {
-
+let lastObj = {};
 
     //este state servira para guardar la informacion que se vaya escribiendo en nuestros inputs, gracias a la ayuda de la funcion handleUnput Change
     const [gameData, setGameData] = useState({
@@ -13,6 +13,8 @@ export const Modal = ({closeModal}) => {
         liked: '',
 
     })
+
+    const [chestLocalStorage, setchestLocalStorage] = useState([]);
     
     //useEffect para setear la informacion que este guardada en local storage dentro de nusetro gameData,importante reordar que la informacion se ira sobreescribiento en el array y es justo lo que queremos, ya que solo queremos tomar esta informacion y agregarsela a el juego que estamos por agregar a nuestro state de chestAdd,es por eso que tenemos la dependencia gameData al final de useEffect para que se sobreescriba 
     useEffect(() => {
@@ -22,13 +24,19 @@ export const Modal = ({closeModal}) => {
     //useEffect para traer la informcion que haya dentro del local storage de nuestro gameData
     useEffect(() => {
         const storedData = localStorage.getItem("gameData");
+        const storedChest = localStorage.getItem("chest");
       
         if (storedData) {
           setGameData(JSON.parse(storedData));
         }
+        if (storedChest) {
+          setchestLocalStorage(JSON.parse(storedChest));
+          console.log({storedChest});
+          // console.log({chestLocalStorage});
+        }
       }, []);
 
-
+ 
 
 
       //handleInputChange hace deconstruccion de las propiedades del evento,target que usaremos para tomar la informacion que el usuario ecriba en los inputs, despues seteams el etGameData con una copia de gameData anterior el cual se puede escribir prevGamedata,ademas de setear la informacion antes mencionada del evento.target y hacer una condicion, esta condicion es que el nombre del input que asignamos en el name de cada uno osea en el [name] puede ser "age", 'platform'... , checara ese input y si es de tipo checkbox lo dejara con la propiedad del checkbox[true,false] ,y si es un input que no sea del tipo checkbox le dara su propiedad value , para tomar lo que estamos ecribiendo
@@ -45,20 +53,62 @@ export const Modal = ({closeModal}) => {
       const handleSubmit = (e) => {
         e.preventDefault();
        
-        console.log({gameData});
+        
         
        
-        closeModal();
+        closeModal()
+    
       };
 
+    
+          
+      useEffect(() => {
+
+        console.log({chestLocalStorage})
+        if (gameData && chestLocalStorage) {
+          const dataToConcat = { ...gameData };
+          setchestLocalStorage([...chestLocalStorage, dataToConcat]);
+        }
+        console.log({chestLocalStorage});
+      }, []);
+
+
+
+
+     
+    
+            
+
+    // useEffect(() => {
+    //   lastObj = chestLocalStorage[chestLocalStorage.length - 1];
+    //     console.log({lastObj} );
+
+    //     if (Object.keys(lastObj).length === 0) {
+    //       chestLocalStorage[chestLocalStorage.length - 1] = {  age: '',
+    //       platform: '',
+    //       finished: false,
+    //       liked: '', };
+    //     } else {
+    //       lastObj.age = chestLocalStorage.age;
+    //       lastObj.platform = chestLocalStorage.platform;
+    //       lastObj.finished = chestLocalStorage.finished;
+    //       lastObj.liked = chestLocalStorage.liked;
+
+    //       chestLocalStorage([...chestLocalStorage, lastObj])
+    //     }
+    //     console.log({lastObj})
+        
+    //   console.log({lastObj});
+    // }, [chestLocalStorage])
+    
     
 
   return (
 
-    <div className="gamepage" style={{color: 'black'}}>
+    <div className="modal" style={{color: 'black'}}>
     <div className="modal-content">
       <h2>Game Card</h2>
-      <form onSubmit={handleSubmit}>
+      <form >
       <p>At What Age Did You Played It:</p>
       <input 
         type="text" 
@@ -68,7 +118,7 @@ export const Modal = ({closeModal}) => {
 
         />
       <p>Wich Platform Did You Use It:</p>
-      <select
+      <select className="gamepageselect"
       name="platform"
       value={gameData.platform}
       onChange={handleInputChange}
@@ -100,10 +150,10 @@ export const Modal = ({closeModal}) => {
         <option value="PsVita" > PsVita</option>
       </select>
       <p>Did You Finish The Game:</p>
-      <input 
+      <input  className="checkbox"
       
       type="checkbox"
-      name="completed"
+      name="finished"
       checked={gameData.finished}
       onChange={handleInputChange} />
       <p>Did you Like It:</p>
@@ -117,7 +167,7 @@ export const Modal = ({closeModal}) => {
             value="no"
             checked={gameData.liked === "no"}
             onChange={handleInputChange} /> No
-      <button onClick={closeModal}>Close</button>
+      <button onClick={handleSubmit}>Close</button>
       </form>
     </div>
   </div>

@@ -1,6 +1,5 @@
-import { useState } from "react"
-import { useEffect } from "react"
-
+import { useState ,useEffect} from "react"
+import {Link} from 'react-router-dom'
 
 
 
@@ -33,13 +32,16 @@ console.log({chestContainer});
             {/* si hay algo dentro de chestContainer hacer map, y renderizar informacion y si no no hagas nada */}
       {
         chestContainer  ?
-        chestContainer.map( game =>(
+        chestContainer.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
 
-          <div className="search" key={game.id}>
+          <div className="search" key={id}>
              
-
-            <img src={game.background_image} width={500} height={277} />
-            <p>{game.name}</p>
+             <Link to={`/gamePage/${name}`}state={
+                        {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
+                    }>
+              <img src={background_image} alt="image" className='image' />
+              </Link>
+              <p>{`Game :${name}`}</p>
 
                     
           

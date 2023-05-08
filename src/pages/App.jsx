@@ -1,7 +1,7 @@
 import '../App.css'
 import {useState, useEffect} from 'react';
 
-import { NextPreviousButton } from '../components';
+import { Gamecard, NextPreviousButton } from '../components';
 import { Link } from 'react-router-dom';
 
 // Funcion principal en la que haremos fetch y guardaremos la data en un useState
@@ -71,69 +71,38 @@ export const App = ( ) => {
         {/* Renderizamos nuestro componente de button para pasar a ala siguiente pagina o a la anterior, para ello necesitamos hacer 2 funciones una que haga fetch en la pagina anterior y una que lo haga en la pagina siguiente,para que a la hora de hacer click en su respectivo boton nos lleve a la pagina adecuada, ahora no solo tenemos que pasar esas funciones para hacer fetch al componente, tambien necesitamos pasasrele la data para que las funciones reciban ese argumento y y acceder a la info que esta en un componente exterior y fuera de nuestra pagina principal , en este caso las funciones serian onPrev e onNext, y la informacion que le mandamos al componente es infoPrev e infoNext   */}
       <NextPreviousButton  prev={infoPrev} next={infoNext} onPrevious={onPrevious} onNext={onNext}/>    
 
-        {
-          saveData.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
+      {
+          // saveData.map( ({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
             
-            <div key={id} className='card'>
-              <Link to={`/gamePage/${name}`}state={
-                        {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
-                    }>
-              <img src={background_image} alt="image" className='image' />
-              </Link>
-              <p>{`Game :${name}`}</p>
-              <p>{`Released Date :${released}`}</p>
-
-              {
-                      platforms.map( ({platform}) =>(
-                        <div key={platform.id}>
-                          <p>{`Platform :${platform.name}`}</p>
-                        </div>
-                      ))
-              }
-
-              {
-                genres.map(({id,name}) =>(
-                  <p key={id}>{`Genres: ${name}`}</p>
-                ))
-              }
-             
-      
-              
-              {
-                ratings.map(rating =>(
-                  <div key={`${rating.id}`}>
-
-                        <p>Gamers Rating</p>
-                        <p>{`# : ${rating.id}`}</p>
-                        <p>{`Valoration: ${rating.title}`}</p>
-                        <p>{`Percent:${rating.percent}`}</p>
-                        
-                  </div>
-                ))
-              }
-            
-            {
-
-              short_screenshots.map(({id,image})=>(
-                <div key={id} className='screenshotcontainer'>
-                        <img src={image} alt="screenshot" className="screenshot" />
+          //   <div key={id} className='card'>
+          //     <Link to={`/gamePage/${name}`}state={
+          //               {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
+          //           }>
+          //     <img src={background_image} alt="image" className='image' />
+          //     </Link>
+          //     <p>{`Game :${name}`}</p>
+          //     <p>{`Released Date :${released}`}</p>
+        
+          saveData.map(({id,name,background_image,ratings,genres,platforms,released,short_screenshots}) =>(
+                <div className='card' key={id}>
+                    <Link to={`/gamePage/${name}`}state={
+                         {id,name,background_image,ratings,genres,platforms,released,short_screenshots}
+                     }>
+               <img src={background_image} alt="image" className='image' />
+               </Link>
+               <p>{`Game :${name}`}</p>
+               <p>{`Released Date :${released}`}</p>
                 </div>
 
-              ))
-            }
 
-              
-
-            </div>
           ))
-        }
-
-
+        
+      }
   
-      </div>
+      
 
       <NextPreviousButton  prev={infoPrev} next={infoNext} onPrevious={onPrevious} onNext={onNext}/>   
-     
+      </div>
     </>
   )
 }
